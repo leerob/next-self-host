@@ -10,12 +10,23 @@ NEXT_PUBLIC_SAFE_KEY="safe-key" # for the demo app
 # Script Vars
 REPO_URL="https://github.com/leerob/next-self-host.git"
 APP_DIR=~/myapp
+SWAP_SIZE="1G"  # Swap size of 1GB
 
 # Get the server's IP address
 SERVER_IP=$(curl -s http://checkip.amazonaws.com)
 
 # Update package list and upgrade existing packages
 sudo apt update && sudo apt upgrade -y
+
+# Add Swap Space
+echo "Adding swap space..."
+sudo fallocate -l $SWAP_SIZE /swapfile
+sudo chmod 600 /swapfile
+sudo mkswap /swapfile
+sudo swapon /swapfile
+
+# Make swap permanent
+echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
 
 # Install Docker
 sudo apt install apt-transport-https ca-certificates curl software-properties-common -y

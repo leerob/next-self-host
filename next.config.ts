@@ -4,7 +4,7 @@ const nextConfig: NextConfig = {
   output: 'standalone',
   images: {
     loader: 'custom',
-    loaderFile: './image-loader.js',
+    loaderFile: './image-loader.ts',
   },
 };
 
