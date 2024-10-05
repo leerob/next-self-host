@@ -87,9 +87,12 @@ sudo apt install nginx -y
 # Remove default Nginx config if it exists, ignore errors
 sudo rm -f /etc/nginx/sites-enabled/default
 
-# Obtain SSL certificate before applying Nginx config
-sudo apt install certbot python3-certbot-nginx -y
-sudo certbot certonly --nginx -d $DOMAIN_NAME --non-interactive --agree-tos -m $EMAIL
+# Stop Nginx temporarily to allow Certbot to run in standalone mode
+sudo systemctl stop nginx
+
+# Obtain SSL certificate using Certbot standalone mode
+sudo apt install certbot -y
+sudo certbot certonly --standalone -d $DOMAIN_NAME --non-interactive --agree-tos -m $EMAIL
 
 # Ensure SSL files exist
 if [ ! -f /etc/letsencrypt/options-ssl-nginx.conf ] || [ ! -f /etc/letsencrypt/ssl-dhparams.pem ]; then
