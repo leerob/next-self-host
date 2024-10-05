@@ -28,6 +28,9 @@ sudo apt install docker-ce -y
 sudo curl -L "https://github.com/docker/compose/releases/download/$(curl -s https://api.github.com/repos/docker/compose/releases/latest | grep tag_name | cut -d '\"' -f 4)/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 sudo chmod +x /usr/local/bin/docker-compose
 
+# Ensure Docker Compose is executable
+sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+
 # Ensure Docker starts on boot and start Docker service
 sudo systemctl enable docker
 sudo systemctl start docker
@@ -45,14 +48,17 @@ fi
 # Generate DATABASE_URL
 DATABASE_URL="postgres://$POSTGRES_USER:$POSTGRES_PASSWORD@localhost:5432/$POSTGRES_DB"
 
-# Create the .env file
-echo "DATABASE_URL=$DATABASE_URL" >> .env
-echo "SECRET_KEY=$SECRET_KEY" >> .env
-echo "NEXT_PUBLIC_SAFE_KEY=$NEXT_PUBLIC_SAFE_KEY" >> .env
+# Create the .env file inside the app directory (~/myapp/.env)
+echo "POSTGRES_USERNAME=$POSTGRES_USER" > "$APP_DIR/.env"
+echo "POSTGRES_PASSWORD=$POSTGRES_PASSWORD" >> "$APP_DIR/.env"
+echo "POSTGRES_DATABASE=$POSTGRES_DB" >> "$APP_DIR/.env"
+echo "DATABASE_URL=$DATABASE_URL" >> "$APP_DIR/.env"
+echo "SECRET_KEY=$SECRET_KEY" >> "$APP_DIR/.env"
+echo "NEXT_PUBLIC_SAFE_KEY=$NEXT_PUBLIC_SAFE_KEY" >> "$APP_DIR/.env"
 
 # Install Nginx
 sudo apt install nginx -y
-sudo rm /etc/nginx/sites-enabled/default
+sudo rm -f /etc/nginx/sites-enabled/default
 
 # Create Nginx config with streaming support
 sudo cat > /etc/nginx/sites-available/myapp <<EOL
@@ -77,14 +83,23 @@ EOL
 sudo ln -s /etc/nginx/sites-available/myapp /etc/nginx/sites-enabled/
 sudo systemctl restart nginx
 
-# Build and run the Docker containers
+# Build and run the Docker containers from the app directory (~/myapp)
+cd $APP_DIR
 sudo docker-compose up -d
+
+# Check if Docker Compose started correctly
+if ! sudo docker-compose ps | grep "Up"; then
+  echo "Docker containers failed to start. Check logs with 'docker-compose logs'."
+  exit 1
+fi
 
 # Output final message
 echo "Deployment complete. Your Next.js app and PostgreSQL database are now running. 
 Next.js is available at http://$SERVER_IP, and the PostgreSQL database is accessible from the web service.
 
 The .env file has been created with the following values:
+- POSTGRES_USERNAME
+- POSTGRES_PASSWORD (randomly generated)
 - POSTGRES_DATABASE
 - DATABASE_URL
 - SECRET_KEY
