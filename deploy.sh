@@ -109,20 +109,8 @@ server {
     listen 80;
     server_name $DOMAIN_NAME;
 
-    location / {
-        proxy_pass http://localhost:3000;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade \$http_upgrade;
-        proxy_set_header Connection 'upgrade';
-        proxy_set_header Host \$host;
-        proxy_cache_bypass \$http_upgrade;
-        proxy_set_header X-Accel-Buffering no;  # Disable buffering for streaming support
-    }
-
     # Redirect all HTTP requests to HTTPS
-    location / {
-        return 301 https://\$host\$request_uri;
-    }
+    return 301 https://\$host\$request_uri;
 }
 
 server {
