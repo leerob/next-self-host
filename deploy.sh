@@ -2,7 +2,7 @@
 
 # Env Vars
 POSTGRES_USER="myuser"
-POSTGRES_PASSWORD="mypassword"
+POSTGRES_PASSWORD=$(openssl rand -base64 12)  # Generate a random 12-character password
 POSTGRES_DB="mydatabase"
 SECRET_KEY="my-secret" # for the demo app
 NEXT_PUBLIC_SAFE_KEY="safe-key" # for the demo app

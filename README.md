@@ -1,6 +1,9 @@
 # Next.js Self Hosting Example
 
-This repository demonstrates how to deploy a Next.js app and a PostgreSQL database on a Linux Ubuntu server using Docker and Nginx. It showcases several key features of Next.js like caching, ISR, environment variables, and more.
+This repo shows how to deploy a Next.js app and a PostgreSQL database on a Linux Ubuntu server using Docker and Nginx. It showcases several key features of Next.js like caching, ISR, environment variables, and more.
+
+> [!WARNING]  
+> This repo is still under development.
 
 ## Deployment Instructions
 
