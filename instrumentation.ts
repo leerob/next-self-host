@@ -20,7 +20,7 @@ export async function register() {
     `https://api.cloud.hashicorp.com/secrets/2023-06-13/organizations/${org}/projects/${project}/apps/${secretName}/open`,
     {
       headers: {
-        Authorization: `Bearer ${process.env.HCP_API_TOKEN}`,
+        Authorization: `Bearer ${process.env.HCP_API_KEY}`,
       },
     }
   );
