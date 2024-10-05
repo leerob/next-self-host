@@ -87,6 +87,16 @@ sudo apt install nginx -y
 # Remove default Nginx config if it exists, ignore errors
 sudo rm -f /etc/nginx/sites-enabled/default
 
+# Obtain SSL certificate before applying Nginx config
+sudo apt install certbot python3-certbot-nginx -y
+sudo certbot certonly --nginx -d $DOMAIN_NAME --non-interactive --agree-tos -m $EMAIL
+
+# Ensure SSL files exist
+if [ ! -f /etc/letsencrypt/options-ssl-nginx.conf ] || [ ! -f /etc/letsencrypt/ssl-dhparams.pem ]; then
+  echo "SSL configuration files not found. Exiting."
+  exit 1
+fi
+
 # Create Nginx config with HTTP-to-HTTPS redirect and SSL support
 sudo cat > /etc/nginx/sites-available/myapp <<EOL
 server {
@@ -134,10 +144,6 @@ EOL
 if [ ! -L /etc/nginx/sites-enabled/myapp ]; then
   sudo ln -s /etc/nginx/sites-available/myapp /etc/nginx/sites-enabled/
 fi
-
-# Install Certbot and obtain SSL certificate
-sudo apt install certbot python3-certbot-nginx -y
-sudo certbot --nginx -d $DOMAIN_NAME --non-interactive --agree-tos -m $EMAIL
 
 # Restart Nginx to apply the new configuration
 sudo systemctl restart nginx
