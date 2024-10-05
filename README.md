@@ -5,6 +5,12 @@ This repo shows how to deploy a Next.js app and a PostgreSQL database on a Linux
 > [!WARNING]  
 > This repo is still under development.
 
+## Prerequisites
+
+1. Purchase a domain name
+2. Purchase a Linux Ubuntu server (e.g. [droplet](https://www.digitalocean.com/products/droplets))
+3. Create an `A` DNS record pointing to your server IPv4 address
+
 ## Deployment Instructions
 
 1. **SSH into your server**:
@@ -23,15 +29,21 @@ This repo shows how to deploy a Next.js app and a PostgreSQL database on a Linux
 
 ### What the Script Does
 
-1. **Installs Docker and Docker Compose**: Ensures your droplet has the necessary tools to run containerized applications.
+1. Installs all the necessary packages for your server
+1. Installs Docker, Docker Compose, and Nginx
+1. Clones this repository
+1. Generates an SSL certificate
+1. Builds your Next.js application from the Dockerfile
+1. Sets up Nginx as a reverse proxy and configures HTTPS
+1. Creates a `.env` file with your Postgres database creds
 
-2. **Clones this Repository**: Pulls the latest version of your Next.js app and the related configuration files.
+Once the deployment completes, your Next.js app will be available at:
 
-3. **Builds and Deploys Your App**: Uses the `Dockerfile` to build the Next.js app and runs it in a Docker container. PostgreSQL is also set up using Docker Compose.
+```
+http://your-provided-domain.com
+```
 
-4. **Sets up Nginx as a Reverse Proxy**: Configures Nginx to proxy HTTP traffic to the Next.js app.
-
-5. **Supports Streaming**: Nginx is configured with `X-Accel-Buffering` set to `no` to support streaming responses, such as real-time data or server-sent events.
+Both the Next.js app and PostgreSQL database will be up and running in Docker containers.
 
 ### Features Supported in This Demo
 
@@ -54,33 +66,6 @@ This repo shows how to deploy a Next.js app and a PostgreSQL database on a Linux
 
 5. **Reading Both Server-Only and Client-Accessible Environment Variables**:
    - [Server-only variables](https://nextjs.org/docs/app/building-your-application/deploying#environment-variables) can be accessed via `process.env`, and client-accessible environment variables (prefixed with `NEXT_PUBLIC_`) are injected into the frontend JavaScript bundle.
-
-### Configuration Files
-
-- [**Nginx Configuration**](https://github.com/leerob/next-self-hosted/blob/main/nginx.conf): Nginx configuration file that forwards traffic to the Next.js app and disables buffering for streaming support.
-- [**Dockerfile**](https://github.com/leerob/next-self-hosted/blob/main/Dockerfile): Dockerfile that sets up the build process for the Next.js app using Bun.
-
-- [**Docker Compose**](https://github.com/leerob/next-self-hosted/blob/main/docker-compose.yml): Docker Compose file that configures and runs both the Next.js app and PostgreSQL database.
-
-### Environment Variables
-
-The deploy script creates a `.env` file for you similar to:
-
-```bash
-DATABASE_URL=
-SECRET_KEY=
-NEXT_PUBLIC_SAFE_KEY=
-```
-
-### Accessing Your App
-
-Once the deployment completes, your Next.js app will be available at:
-
-```
-http://your_server_ip
-```
-
-Both the Next.js app and PostgreSQL database will be up and running in Docker containers.
 
 ### Running Locally
 

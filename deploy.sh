@@ -84,8 +84,9 @@ echo "NEXT_PUBLIC_SAFE_KEY=$NEXT_PUBLIC_SAFE_KEY" >> "$APP_DIR/.env"
 # Install Nginx
 sudo apt install nginx -y
 
-# Remove default Nginx config if it exists, ignore errors
-sudo rm -f /etc/nginx/sites-enabled/default
+# Remove old Nginx config (if it exists)
+sudo rm -f /etc/nginx/sites-available/myapp
+sudo rm -f /etc/nginx/sites-enabled/myapp
 
 # Stop Nginx temporarily to allow Certbot to run in standalone mode
 sudo systemctl stop nginx
@@ -94,10 +95,13 @@ sudo systemctl stop nginx
 sudo apt install certbot -y
 sudo certbot certonly --standalone -d $DOMAIN_NAME --non-interactive --agree-tos -m $EMAIL
 
-# Ensure SSL files exist
-if [ ! -f /etc/letsencrypt/options-ssl-nginx.conf ] || [ ! -f /etc/letsencrypt/ssl-dhparams.pem ]; then
-  echo "SSL configuration files not found. Exiting."
-  exit 1
+# Ensure SSL files exist or generate them
+if [ ! -f /etc/letsencrypt/options-ssl-nginx.conf ]; then
+  sudo wget https://raw.githubusercontent.com/certbot/certbot/main/certbot-nginx/certbot_nginx/_internal/tls_configs/options-ssl-nginx.conf -P /etc/letsencrypt/
+fi
+
+if [ ! -f /etc/letsencrypt/ssl-dhparams.pem ]; then
+  sudo openssl dhparam -out /etc/letsencrypt/ssl-dhparams.pem 2048
 fi
 
 # Create Nginx config with HTTP-to-HTTPS redirect and SSL support
@@ -106,20 +110,8 @@ server {
     listen 80;
     server_name $DOMAIN_NAME;
 
-    location / {
-        proxy_pass http://localhost:3000;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade \$http_upgrade;
-        proxy_set_header Connection 'upgrade';
-        proxy_set_header Host \$host;
-        proxy_cache_bypass \$http_upgrade;
-        proxy_set_header X-Accel-Buffering no;  # Disable buffering for streaming support
-    }
-
     # Redirect all HTTP requests to HTTPS
-    location / {
-        return 301 https://\$host\$request_uri;
-    }
+    return 301 https://\$host\$request_uri;
 }
 
 server {
@@ -144,9 +136,7 @@ server {
 EOL
 
 # Create symbolic link if it doesn't already exist
-if [ ! -L /etc/nginx/sites-enabled/myapp ]; then
-  sudo ln -s /etc/nginx/sites-available/myapp /etc/nginx/sites-enabled/
-fi
+sudo ln -s /etc/nginx/sites-available/myapp /etc/nginx/sites-enabled/myapp
 
 # Restart Nginx to apply the new configuration
 sudo systemctl restart nginx
