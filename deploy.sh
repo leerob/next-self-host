@@ -6,14 +6,13 @@ POSTGRES_PASSWORD=$(openssl rand -base64 12)  # Generate a random 12-character p
 POSTGRES_DB="mydatabase"
 SECRET_KEY="my-secret" # for the demo app
 NEXT_PUBLIC_SAFE_KEY="safe-key" # for the demo app
+DOMAIN_NAME="nextselfhost.dev" # replace with your own
+EMAIL="your-email@example.com" # replace with your own
 
 # Script Vars
 REPO_URL="https://github.com/leerob/next-self-host.git"
 APP_DIR=~/myapp
 SWAP_SIZE="1G"  # Swap size of 1GB
-
-# Get the server's IP address
-SERVER_IP=$(curl -s http://checkip.amazonaws.com)
 
 # Update package list and upgrade existing packages
 sudo apt update && sudo apt upgrade -y
@@ -88,12 +87,36 @@ sudo apt install nginx -y
 # Remove default Nginx config if it exists, ignore errors
 sudo rm -f /etc/nginx/sites-enabled/default
 
-# Create Nginx config with streaming support
+# Create Nginx config with HTTP-to-HTTPS redirect and SSL support
 sudo cat > /etc/nginx/sites-available/myapp <<EOL
 server {
     listen 80;
+    server_name $DOMAIN_NAME;
 
-    server_name $SERVER_IP;
+    location / {
+        proxy_pass http://localhost:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade \$http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host \$host;
+        proxy_cache_bypass \$http_upgrade;
+        proxy_set_header X-Accel-Buffering no;  # Disable buffering for streaming support
+    }
+
+    # Redirect all HTTP requests to HTTPS
+    location / {
+        return 301 https://\$host\$request_uri;
+    }
+}
+
+server {
+    listen 443 ssl;
+    server_name $DOMAIN_NAME;
+
+    ssl_certificate /etc/letsencrypt/live/$DOMAIN_NAME/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/$DOMAIN_NAME/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
 
     location / {
         proxy_pass http://localhost:3000;
@@ -112,6 +135,10 @@ if [ ! -L /etc/nginx/sites-enabled/myapp ]; then
   sudo ln -s /etc/nginx/sites-available/myapp /etc/nginx/sites-enabled/
 fi
 
+# Install Certbot and obtain SSL certificate
+sudo apt install certbot python3-certbot-nginx -y
+sudo certbot --nginx -d $DOMAIN_NAME --non-interactive --agree-tos -m $EMAIL
+
 # Restart Nginx to apply the new configuration
 sudo systemctl restart nginx
 
@@ -127,7 +154,7 @@ fi
 
 # Output final message
 echo "Deployment complete. Your Next.js app and PostgreSQL database are now running. 
-Next.js is available at http://$SERVER_IP, and the PostgreSQL database is accessible from the web service.
+Next.js is available at https://$DOMAIN_NAME, and the PostgreSQL database is accessible from the web service.
 
 The .env file has been created with the following values:
 - POSTGRES_USERNAME

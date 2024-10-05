@@ -37,7 +37,7 @@ This repo shows how to deploy a Next.js app and a PostgreSQL database on a Linux
 
 1. **Configuring Caching and Incremental Static Regeneration (ISR)**:
 
-   - Next.js uses [automatic caching](https://nextjs.org/docs/app/building-your-application/deploying#caching-and-isr) with ISR to cache pages and revalidate them in the background based on the `getStaticProps` function.
+   - Next.js uses [automatic caching](https://nextjs.org/docs/app/building-your-application/deploying#caching-and-isr) with ISR to cache pages and revalidate them in the background.
    - You can configure the cache location for persistent storage across containers in the Next.js app.
 
 2. **Reading Environment Variables on Server Startup**:
@@ -50,7 +50,7 @@ This repo shows how to deploy a Next.js app and a PostgreSQL database on a Linux
 
 4. **Using Middleware to Protect Routes**:
 
-   - This demo allows you to set up [Middleware](https://nextjs.org/docs/app/building-your-application/deploying#middleware) to protect specific routes. Middleware can execute logic, such as authentication, before routing requests.
+   - This demo allows you to set up [Middleware](https://nextjs.org/docs/app/building-your-application/deploying#middleware) to protect specific routes.
 
 5. **Reading Both Server-Only and Client-Accessible Environment Variables**:
    - [Server-only variables](https://nextjs.org/docs/app/building-your-application/deploying#environment-variables) can be accessed via `process.env`, and client-accessible environment variables (prefixed with `NEXT_PUBLIC_`) are injected into the frontend JavaScript bundle.
