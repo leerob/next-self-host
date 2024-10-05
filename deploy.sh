@@ -84,8 +84,9 @@ echo "NEXT_PUBLIC_SAFE_KEY=$NEXT_PUBLIC_SAFE_KEY" >> "$APP_DIR/.env"
 # Install Nginx
 sudo apt install nginx -y
 
-# Remove default Nginx config if it exists, ignore errors
-sudo rm -f /etc/nginx/sites-enabled/default
+# Remove old Nginx config (if it exists)
+sudo rm -f /etc/nginx/sites-available/myapp
+sudo rm -f /etc/nginx/sites-enabled/myapp
 
 # Stop Nginx temporarily to allow Certbot to run in standalone mode
 sudo systemctl stop nginx
@@ -135,9 +136,7 @@ server {
 EOL
 
 # Create symbolic link if it doesn't already exist
-if [ ! -L /etc/nginx/sites-enabled/myapp ]; then
-  sudo ln -s /etc/nginx/sites-available/myapp /etc/nginx/sites-enabled/
-fi
+sudo ln -s /etc/nginx/sites-available/myapp /etc/nginx/sites-enabled/myapp
 
 # Restart Nginx to apply the new configuration
 sudo systemctl restart nginx
