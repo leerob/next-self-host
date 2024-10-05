@@ -28,8 +28,8 @@ sudo apt install docker-ce -y
 sudo curl -L "https://github.com/docker/compose/releases/download/$(curl -s https://api.github.com/repos/docker/compose/releases/latest | grep tag_name | cut -d '\"' -f 4)/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 sudo chmod +x /usr/local/bin/docker-compose
 
-# Ensure Docker Compose is executable
-sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+# Ensure Docker Compose is executable and in path
+sudo ln -sf /usr/local/bin/docker-compose /usr/bin/docker-compose
 
 # Ensure Docker starts on boot and start Docker service
 sudo systemctl enable docker
@@ -58,6 +58,8 @@ echo "NEXT_PUBLIC_SAFE_KEY=$NEXT_PUBLIC_SAFE_KEY" >> "$APP_DIR/.env"
 
 # Install Nginx
 sudo apt install nginx -y
+
+# Remove default Nginx config if it exists, ignore errors
 sudo rm -f /etc/nginx/sites-enabled/default
 
 # Create Nginx config with streaming support
@@ -79,8 +81,12 @@ server {
 }
 EOL
 
-# Enable Nginx configuration and restart Nginx
-sudo ln -s /etc/nginx/sites-available/myapp /etc/nginx/sites-enabled/
+# Create symbolic link if it doesn't already exist
+if [ ! -L /etc/nginx/sites-enabled/myapp ]; then
+  sudo ln -s /etc/nginx/sites-available/myapp /etc/nginx/sites-enabled/
+fi
+
+# Restart Nginx to apply the new configuration
 sudo systemctl restart nginx
 
 # Build and run the Docker containers from the app directory (~/myapp)
