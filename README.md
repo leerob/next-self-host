@@ -16,7 +16,7 @@ This repo shows how to deploy a Next.js app and a PostgreSQL database on a Linux
 2. **Download and run the deployment script**:
 
    ```bash
-   curl -o ~/deploy.sh https://raw.githubusercontent.com/leerob/next-self-hosted/main/deploy.sh
+   curl -o ~/deploy.sh https://raw.githubusercontent.com/leerob/next-self-host/main/deploy.sh
    chmod +x ~/deploy.sh
    ./deploy.sh
    ```
