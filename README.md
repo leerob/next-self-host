@@ -109,3 +109,44 @@ If you want to run this setup locally using Docker, you can follow these steps:
    ```
 
    This command will start both services and make your Next.js app available at `http://localhost:3000` with the PostgreSQL database running in the background.
+
+## Troubleshooting
+
+If you encounter issues like "Internal Server Error" or Nginx returning a 502 Bad Gateway, follow these steps to troubleshoot:
+
+1. **Check Nginx Logs**:
+
+   - Nginx handles reverse proxying, and if it can't reach the application, it will log the issue. You can tail the Nginx logs to see any errors:
+     ```bash
+     sudo tail -f /var/log/nginx/error.log
+     ```
+   - Look for `connect() failed (111: Connection refused)` or similar errors, which suggest that Nginx is unable to reach the application.
+
+2. **Check Docker Logs**:
+
+   - If Nginx is unable to connect to the application, verify if the application container is running correctly.
+   - First, check the status of the Docker containers:
+     ```bash
+     docker-compose ps
+     ```
+   - If the web container isn’t running, check the logs to see why it failed:
+     ```bash
+     docker-compose logs web
+     ```
+
+3. **Restart Containers and Nginx**:
+
+   - If the containers or Nginx are not behaving as expected, restart them:
+     - Restart Docker containers:
+       ```bash
+       docker-compose down
+       docker-compose up -d
+       ```
+     - Restart Nginx:
+       ```bash
+       sudo systemctl restart nginx
+       ```
+
+4. **Check Application Environment Variables**:
+   - Ensure the `.env` file is correctly set up with the right database credentials and environment variables. If any variables are missing or incorrect, the app might not start properly.
+   - You can update the `.env` file located in the app directory and then rebuild the Docker containers.
