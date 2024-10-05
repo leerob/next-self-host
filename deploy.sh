@@ -130,7 +130,7 @@ server {
         proxy_set_header Connection 'upgrade';
         proxy_set_header Host \$host;
         proxy_cache_bypass \$http_upgrade;
-        proxy_set_header X-Accel-Buffering no;  # Disable buffering for streaming support
+        proxy_buffering no;  # Disable buffering for streaming support
     }
 }
 EOL
