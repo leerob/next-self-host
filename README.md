@@ -64,14 +64,12 @@ This repo shows how to deploy a Next.js app and a PostgreSQL database on a Linux
 
 ### Environment Variables
 
-You can configure the PostgreSQL database credentials using an `.env` file. Add the following to your `.env` file in the root of the repository:
-
-#### Example `.env` file:
+The deploy script creates a `.env` file for you similar to:
 
 ```bash
-POSTGRES_USERNAME=myuser
-POSTGRES_PASSWORD=mypassword
-POSTGRES_DATABASE=mydatabase
+DATABASE_URL=
+SECRET_KEY=
+NEXT_PUBLIC_SAFE_KEY=
 ```
 
 ### Accessing Your App
