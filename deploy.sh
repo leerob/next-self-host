@@ -94,10 +94,13 @@ sudo systemctl stop nginx
 sudo apt install certbot -y
 sudo certbot certonly --standalone -d $DOMAIN_NAME --non-interactive --agree-tos -m $EMAIL
 
-# Ensure SSL files exist
-if [ ! -f /etc/letsencrypt/options-ssl-nginx.conf ] || [ ! -f /etc/letsencrypt/ssl-dhparams.pem ]; then
-  echo "SSL configuration files not found. Exiting."
-  exit 1
+# Ensure SSL files exist or generate them
+if [ ! -f /etc/letsencrypt/options-ssl-nginx.conf ]; then
+  sudo wget https://raw.githubusercontent.com/certbot/certbot/main/certbot-nginx/certbot_nginx/_internal/tls_configs/options-ssl-nginx.conf -P /etc/letsencrypt/
+fi
+
+if [ ! -f /etc/letsencrypt/ssl-dhparams.pem ]; then
+  sudo openssl dhparam -out /etc/letsencrypt/ssl-dhparams.pem 2048
 fi
 
 # Create Nginx config with HTTP-to-HTTPS redirect and SSL support
