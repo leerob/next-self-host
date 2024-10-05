@@ -1,4 +1,4 @@
-FROM oven/bun:alpine AS base
+FROM oven/bun:1 AS base
 
 # Stage 1: Install dependencies
 FROM base AS deps
@@ -14,7 +14,7 @@ COPY . .
 RUN bun run build
 
 # Stage 3: Production image
-FROM base AS runner
+FROM oven/bun:alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 COPY --from=builder /app/public ./public
