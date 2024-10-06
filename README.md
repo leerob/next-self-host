@@ -134,7 +134,7 @@ bun run db:studio
 
 ## Cron
 
-I've also included a basic cron job which runs every hour to clear the databse. It calls a Route Handler in the Next.js application.
+I've also included a basic cron job which runs every hour to clear the database. It calls a Route Handler in the Next.js application.
 
 You can view the cron logs as follows:
 
