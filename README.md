@@ -45,7 +45,19 @@ Once the deployment completes, your Next.js app will be available at:
 http://your-provided-domain.com
 ```
 
-Both the Next.js app and PostgreSQL database will be up and running in Docker containers.
+Both the Next.js app and PostgreSQL database will be up and running in Docker containers. To set up your database, you could install `npm` inside your Postgres container and use the Drizzle scripts, or you can use `psql`:
+
+```bash
+docker exec -it myapp-db-1 sh
+apk add --no-cache postgresql-client
+psql -U myuser -d mydatabase -c '
+CREATE TABLE IF NOT EXISTS "todos" (
+  "id" serial PRIMARY KEY NOT NULL,
+  "content" varchar(255) NOT NULL,
+  "completed" boolean DEFAULT false,
+  "created_at" timestamp DEFAULT now()
+);'
+```
 
 For pushing subsequent updates, I also provided an `update.sh` script as an example.
 
