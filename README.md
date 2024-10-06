@@ -37,6 +37,7 @@ I've included a Bash script which does the following:
 1. Generates an SSL certificate
 1. Builds your Next.js application from the Dockerfile
 1. Sets up Nginx as a reverse proxy and configures HTTPS
+1. Sets up a cron which clears the database every hour
 1. Creates a `.env` file with your Postgres database creds
 
 Once the deployment completes, your Next.js app will be available at:
@@ -129,6 +130,16 @@ If you want to view the contents of the database, you can use Drizzle Studio:
 
 ```bash
 bun run db:studio
+```
+
+## Cron
+
+I've also included a basic cron job which runs every hour to clear the databse. It calls a Route Handler in the Next.js application.
+
+You can view the cron logs as follows:
+
+```bash
+docker-compose logs cron
 ```
 
 ## Troubleshooting
