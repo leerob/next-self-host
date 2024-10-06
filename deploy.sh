@@ -70,14 +70,20 @@ else
   cd $APP_DIR
 fi
 
-# Generate DATABASE_URL
-DATABASE_URL="postgres://$POSTGRES_USER:$POSTGRES_PASSWORD@localhost:5432/$POSTGRES_DB"
+# For Docker internal communication ("db" is the name of Postgres container)
+DATABASE_URL="postgres://$POSTGRES_USER:$POSTGRES_PASSWORD@db:5432/$POSTGRES_DB"
+
+# For external tools (like Drizzle Studio)
+DATABASE_URL_EXTERNAL="postgres://$POSTGRES_USER:$POSTGRES_PASSWORD@localhost:5432/$POSTGRES_DB"
 
 # Create the .env file inside the app directory (~/myapp/.env)
-echo "POSTGRES_USERNAME=$POSTGRES_USER" > "$APP_DIR/.env"
+echo "POSTGRES_USER=$POSTGRES_USER" > "$APP_DIR/.env"
 echo "POSTGRES_PASSWORD=$POSTGRES_PASSWORD" >> "$APP_DIR/.env"
-echo "POSTGRES_DATABASE=$POSTGRES_DB" >> "$APP_DIR/.env"
+echo "POSTGRES_DB=$POSTGRES_DB" >> "$APP_DIR/.env"
 echo "DATABASE_URL=$DATABASE_URL" >> "$APP_DIR/.env"
+echo "DATABASE_URL_EXTERNAL=$DATABASE_URL_EXTERNAL" >> "$APP_DIR/.env"
+
+# These are just for the demo of env vars
 echo "SECRET_KEY=$SECRET_KEY" >> "$APP_DIR/.env"
 echo "NEXT_PUBLIC_SAFE_KEY=$NEXT_PUBLIC_SAFE_KEY" >> "$APP_DIR/.env"
 

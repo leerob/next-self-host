@@ -1,4 +1,3 @@
-version: '3'
 services:
   web:
     build: .
@@ -8,13 +7,26 @@ services:
       - NODE_ENV=production
     depends_on:
       - db
+    networks:
+      - my_network
+
   db:
     image: postgres:latest
     environment:
-      POSTGRES_USER: '${POSTGRES_USERNAME}'
-      POSTGRES_PASSWORD: '${POSTGRES_PASSWORD}'
-      POSTGRES_DB: '${POSTGRES_DATABASE}'
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - '5432:5432'
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - my_network
+
 volumes:
   postgres_data:
+
+networks:
+  my_network:
+    name: my_network
+    driver: bridge

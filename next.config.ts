@@ -1,7 +1,11 @@
 import type { NextConfig } from 'next';
+import path from 'path';
 
 const nextConfig: NextConfig = {
   output: 'standalone',
+  // Optional: bring your own cache handler
+  // cacheHandler: path.resolve('./cache-handler.mjs'),
+  // cacheMaxMemorySize: 0, // Disable default in-memory caching
   images: {
     // Optional: use a different optimization service
     // loader: 'custom',

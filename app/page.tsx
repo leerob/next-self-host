@@ -4,7 +4,7 @@ import { connection } from 'next/server';
 async function getPokemon() {
   await connection();
 
-  let apiKey = global.secrets.apiKey;
+  let apiKey = global.secrets.apiKey || 'None for demo';
   let randomNumber = Math.floor(Math.random() * 100) + 1;
 
   return await fetch(`https://api.vercel.app/pokemon/${randomNumber}`, {

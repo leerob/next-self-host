@@ -1,6 +1,6 @@
 # Next.js Self Hosting Example
 
-This repo shows how to deploy a Next.js app and a PostgreSQL database on a Linux Ubuntu server using Docker and Nginx. It showcases several key features of Next.js like caching, ISR, environment variables, and more.
+This repo shows how to deploy a Next.js app and a PostgreSQL database on a Ubuntu Linux server using Docker and Nginx. It showcases using several features of Next.js like caching, ISR, environment variables, and more.
 
 > [!WARNING]  
 > This repo is still under development.
@@ -59,7 +59,9 @@ By default, Next.js ISR uses an `lru-cache` and stores cached entries in memory.
 
 If you would prefer to override the location of the cache, you can optionally store these entries to storage like Redis. If you are deploying a multi-container application, you will need to use this. For this demo, it's not required.
 
-**Learn more: https://nextjs.org/docs/app/building-your-application/deploying#caching-and-isr**
+To see a demo on time-based invalidation and on-demand invalidation, go to `/isr`.
+
+[**→ Read the docs**](https://nextjs.org/docs/app/building-your-application/deploying#caching-and-isr)
 
 ### Environment Variables
 
@@ -69,7 +71,7 @@ Env vars prefixed with `NEXT_PUBLIC_` will be bundled and sent to the browser. `
 
 If you want a secret env value to remain server only, you should only access it from a Server Component. `app/page.tsx` shows an example of this.
 
-**Learn more: https://nextjs.org/docs/app/building-your-application/deploying#environment-variables**
+[**→ Read the docs**](https://nextjs.org/docs/app/building-your-application/deploying#environment-variables)
 
 ## Server Startup
 
@@ -77,9 +79,15 @@ Next.js includes an `instrumentation` file which can run some code when the serv
 
 This value will be stabilized in Next.js 15 (which this repo is using) – the documentation currently shows it under an experimental object in `next.config.js`.
 
-A common use case for this is reading secrets from a remote location, like Vault or 1Password. I've included an example with Vault, if you provide the necessary env vars to your `.env` file.
+A common use case for this is reading secrets from a remote location, like Vault or 1Password. I've included an example with Vault, if you provide the necessary env vars to your `.env` file. This is not required, though.
 
-**Learn more: https://nextjs.org/docs/app/building-your-application/optimizing/instrumentation**
+```bash
+HCP_API_KEY=
+HCP_ORG=
+HCP_PROJECT=
+```
+
+[**→ Read the docs**](https://nextjs.org/docs/app/building-your-application/optimizing/instrumentation)
 
 ### Image Optimization
 
@@ -87,13 +95,13 @@ Next.js supports optimizing images out of the box with `next start`. We've made 
 
 I've included a custom image loader, which will allow you to move optimization to a separate self-hosted service or cloud API if you prefer. You can uncomment that in the configuration and then modify `image-loader.ts` with your service.
 
-**Learn more: https://nextjs.org/docs/app/building-your-application/deploying#image-optimization**
+[**→ Read the docs**](https://nextjs.org/docs/app/building-your-application/deploying#image-optimization)
 
 ### Middleware
 
 This demo has a route `/protected` which is guarded by Middleware.
 
-**Learn more: https://nextjs.org/docs/app/building-your-application/deploying#middleware**
+[**→ Read the docs**](https://nextjs.org/docs/app/building-your-application/deploying#middleware)
 
 ## Running Locally
 
@@ -103,7 +111,13 @@ If you want to run this setup locally using Docker, you can follow these steps:
 docker-compose up
 ```
 
-This will start both services and make your Next.js app available at `http://localhost:3000` with the PostgreSQL database running in the background.
+This will start both services and make your Next.js app available at `http://localhost:3000` with the PostgreSQL database running in the background. We also create a network so that our two containers can communicate with each other.
+
+If you want to view the contents of the database, you can use Drizzle Studio:
+
+```bash
+bun run db:studio
+```
 
 ## Troubleshooting
 
