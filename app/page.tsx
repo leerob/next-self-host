@@ -49,6 +49,27 @@ export default async function Home() {
         This route is proteted by a cookie, you will redirect back to /. To view
         the route, add the protected=1 cookie in the browser
       </small>
+      <h3>Database</h3>
+      <p>
+        Navigate to <a href="/db">/protected</a>
+      </p>
+      <small>
+        This route reads and writes to our Postgres database, which is in its
+        own Docker container. It uses Drizzle for the ORM. There's also a cron
+        job which clears out the database, to reset the demo data.
+      </small>
+      <h3>Incremental Static Regeneration</h3>
+      <p>
+        Navigate to <a href="/isr">/protected</a>
+      </p>
+      <small>
+        This route retrieves data with <code>fetch</code> from an API. Then, it
+        adds a time-based <code>revalidate</code> time of 10 seconds. This
+        indicates it will be "fresh" for a maximum of that time. You can view
+        the
+        <code>s-maxage=10, stale-while-revalidate=31536000</code> response
+        header for the page.
+      </small>
     </section>
   );
 }
