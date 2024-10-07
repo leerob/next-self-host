@@ -113,3 +113,4 @@ bun run db:studio
 
 - [Kubernetes Example](https://github.com/ezeparziale/nextjs-k8s)
 - [Redis Cache Adapter for Next.js](https://github.com/vercel/next.js/tree/canary/examples/cache-handler-redis)
+- [ipx – Image optimization library](https://github.com/unjs/ipx)
