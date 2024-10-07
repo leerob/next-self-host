@@ -2,16 +2,13 @@
 
 This repo shows how to deploy a Next.js app and a PostgreSQL database on a Ubuntu Linux server using Docker and Nginx. It showcases using several features of Next.js like caching, ISR, environment variables, and more.
 
-> [!WARNING]  
-> This repo is still under development.
-
 ## Prerequisites
 
 1. Purchase a domain name
 2. Purchase a Linux Ubuntu server (e.g. [droplet](https://www.digitalocean.com/products/droplets))
 3. Create an `A` DNS record pointing to your server IPv4 address
 
-## Deployment Instructions
+## Quickstart
 
 1. **SSH into your server**:
 
@@ -19,10 +16,17 @@ This repo shows how to deploy a Next.js app and a PostgreSQL database on a Ubunt
    ssh root@your_server_ip
    ```
 
-2. **Download and run the deployment script**:
+2. **Download the deployment script**:
 
    ```bash
    curl -o ~/deploy.sh https://raw.githubusercontent.com/leerob/next-self-host/main/deploy.sh
+   ```
+
+   You can then modify the email and domain name variales inside of the script to use your own.
+
+3. **Run the deployment script**:
+
+   ```bash
    chmod +x ~/deploy.sh
    ./deploy.sh
    ```
@@ -126,7 +130,7 @@ docker-compose up
 
 This will start both services and make your Next.js app available at `http://localhost:3000` with the PostgreSQL database running in the background. We also create a network so that our two containers can communicate with each other.
 
-If you want to view the contents of the database, you can use Drizzle Studio:
+If you want to view the contents of the local database, you can use Drizzle Studio:
 
 ```bash
 bun run db:studio
@@ -136,7 +140,7 @@ bun run db:studio
 
 I've also included a basic cron job which runs every hour to clear the database. It calls a Route Handler in the Next.js application.
 
-You can view the cron logs as follows:
+You can view the cron logs as follows from inside of your `myapp/` (or different chosen name) folder:
 
 ```bash
 docker-compose logs cron
@@ -149,5 +153,5 @@ docker-compose logs cron
 - `docker-compose down` - shut down the Docker containers
 - `docker-compose up -d` - start containers in the background
 - `sudo systemctl restart nginx` - restart nginx
-- `docker exec -it myapp-web-1 sh` - enter Next.js Docker container, from `myapp/`
-- `docker exec -it myapp-db-1 psql -U myuser -d mydatabase` - enter Postgres db, from `myapp/`
+- `docker exec -it myapp-web-1 sh` - enter Next.js Docker container
+- `docker exec -it myapp-db-1 psql -U myuser -d mydatabase` - enter Postgres db
