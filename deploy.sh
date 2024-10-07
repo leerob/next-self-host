@@ -110,8 +110,10 @@ if [ ! -f /etc/letsencrypt/ssl-dhparams.pem ]; then
   sudo openssl dhparam -out /etc/letsencrypt/ssl-dhparams.pem 2048
 fi
 
-# Create Nginx config with HTTP-to-HTTPS redirect and SSL support
+# Create Nginx config with reverse proxy, SSL support, rate limiting, and streaming support
 sudo cat > /etc/nginx/sites-available/myapp <<EOL
+limit_req_zone \$binary_remote_addr zone=mylimit:10m rate=10r/s;
+
 server {
     listen 80;
     server_name $DOMAIN_NAME;
@@ -129,6 +131,9 @@ server {
     include /etc/letsencrypt/options-ssl-nginx.conf;
     ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
 
+    # Enable rate limiting
+    limit_req zone=mylimit burst=20 nodelay;
+
     location / {
         proxy_pass http://localhost:3000;
         proxy_http_version 1.1;
@@ -136,7 +141,23 @@ server {
         proxy_set_header Connection 'upgrade';
         proxy_set_header Host \$host;
         proxy_cache_bypass \$http_upgrade;
-        proxy_buffering off;  # Disable buffering for streaming support
+
+        # Disable buffering for streaming support
+        proxy_buffering off;
+        proxy_request_buffering off;
+
+        # Ensure chunked transfer encoding is enabled
+        chunked_transfer_encoding on;
+
+        # Set proxy buffer sizes
+        proxy_buffers 8 16k;
+        proxy_buffer_size 32k;
+
+        # Additional headers for streaming
+        proxy_set_header X-Accel-Buffering no;
+
+        # Apply rate limiting
+        limit_req zone=mylimit burst=20 nodelay;
     }
 }
 EOL
