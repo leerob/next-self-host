@@ -23,6 +23,8 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  // We'll handle this in nginx
+  compress: false,
 };
 
 export default nextConfig;
