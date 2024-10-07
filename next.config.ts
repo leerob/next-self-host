@@ -1,7 +1,9 @@
 import type { NextConfig } from 'next';
-import path from 'path';
+// import path from 'path';
 
 const nextConfig: NextConfig = {
+  // Recommended: this will reduce output
+  // Docker image size by 80%+
   output: 'standalone',
   // Optional: bring your own cache handler
   // cacheHandler: path.resolve('./cache-handler.mjs'),
@@ -27,6 +29,9 @@ const nextConfig: NextConfig = {
   // compression here so we can prevent buffering
   // streaming responses
   compress: false,
+  // Optional: override the default (1 year) `stale-while-revalidate`
+  // header time for static pages
+  // swrDelta: 3600 // seconds
 };
 
 export default nextConfig;
