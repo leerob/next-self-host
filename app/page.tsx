@@ -56,21 +56,17 @@ export default async function Home() {
         </a>
       </p>
 
-      <h3>Middleware</h3>
+      <h3>Streaming</h3>
       <p>
-        The <code>/protected</code> route is protected by a cookie. You will be
-        redirected back to <code>/</code>. To view the route, add the{' '}
-        <code>protected=1</code> cookie in the browser.
+        The Next.js App router supports streaming responses. This demo uses
+        <code>Suspense</code> with an <code>async</code> component to stream in
+        different components with a delay.
       </p>
       <p>
-        This demo has a protected route, guarded by Middleware, showcasing how
-        you can restrict access based on authentication or other criteria.
+        <a href="/streaming">View the demo</a>
       </p>
       <p>
-        <a href="/protected">View the demo</a>
-      </p>
-      <p>
-        <a href="https://nextjs.org/docs/app/building-your-application/deploying#middleware">
+        <a href="https://nextjs.org/docs/app/building-your-application/routing/loading-ui-and-streaming">
           Read the docs
         </a>
       </p>
@@ -108,6 +104,25 @@ export default async function Home() {
       </p>
       <p>
         <a href="https://nextjs.org/docs/app/building-your-application/deploying#caching-and-isr">
+          Read the docs
+        </a>
+      </p>
+
+      <h3>Middleware</h3>
+      <p>
+        The <code>/protected</code> route is protected by a cookie. You will be
+        redirected back to <code>/</code>. To view the route, add the{' '}
+        <code>protected=1</code> cookie in the browser.
+      </p>
+      <p>
+        This demo has a protected route, guarded by Middleware, showcasing how
+        you can restrict access based on authentication or other criteria.
+      </p>
+      <p>
+        <a href="/protected">View the demo</a>
+      </p>
+      <p>
+        <a href="https://nextjs.org/docs/app/building-your-application/deploying#middleware">
           Read the docs
         </a>
       </p>

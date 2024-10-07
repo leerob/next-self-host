@@ -23,7 +23,9 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  // We'll handle this in nginx
+  // Nginx will do gzip compression. We disable
+  // compression here so we can prevent buffering
+  // streaming responses
   compress: false,
 };
 
