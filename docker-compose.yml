@@ -28,7 +28,7 @@ services:
     command: >
       sh -c "
         apk add --no-cache curl && \
-        echo '0 * * * * curl -X POST http://web:3000/db/clear' > /etc/crontabs/root && \
+        echo '*/10 * * * * curl -X POST http://web:3000/db/clear' > /etc/crontabs/root && \
         crond -f -l 2
       "
     depends_on:
