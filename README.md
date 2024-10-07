@@ -31,6 +31,22 @@ This repo shows how to deploy a Next.js app and a PostgreSQL database on a Ubunt
    ./deploy.sh
    ```
 
+## Supported Features
+
+This demo tries to showcase many different Next.js features.
+
+- Image Optimization
+- Streaming
+- Talking to a Postgres database
+- Caching
+- Incremental Static Regeneration
+- Reading environment variables
+- Using Middleware
+- Running code on server startup
+- A cron that hits a Route Handler
+
+View the demo at https://nextselfhost.dev to see further explanations.
+
 ## Deploy Script
 
 I've included a Bash script which does the following:
@@ -66,60 +82,6 @@ CREATE TABLE IF NOT EXISTS "todos" (
 
 For pushing subsequent updates, I also provided an `update.sh` script as an example.
 
-## Supported Features
-
-This demo tries to showcase many different Next.js features.
-
-### Caching / Incremental Static Regeneration
-
-By default, Next.js ISR uses an `lru-cache` and stores cached entries in memory. This works without configuration.
-
-If you would prefer to override the location of the cache, you can optionally store these entries to storage like Redis. If you are deploying a multi-container application, you will need to use this. For this demo, it's not required.
-
-To see a demo on time-based invalidation and on-demand invalidation, go to `/isr`.
-
-[**→ Read the docs**](https://nextjs.org/docs/app/building-your-application/deploying#caching-and-isr)
-
-### Environment Variables
-
-Next.js supports loading environment variables from `.env` files.
-
-Env vars prefixed with `NEXT_PUBLIC_` will be bundled and sent to the browser. `app/protected/page.tsx` shows an example of this. You can look at the source document to verify it has been bundled. This only makes sense for values you're comfortable being exposed to the browser.
-
-If you want a secret env value to remain server only, you should only access it from a Server Component. `app/page.tsx` shows an example of this.
-
-[**→ Read the docs**](https://nextjs.org/docs/app/building-your-application/deploying#environment-variables)
-
-## Server Startup
-
-Next.js includes an `instrumentation` file which can run some code when the server starts.
-
-This value will be stabilized in Next.js 15 (which this repo is using) – the documentation currently shows it under an experimental object in `next.config.js`.
-
-A common use case for this is reading secrets from a remote location, like Vault or 1Password. I've included an example with Vault, if you provide the necessary env vars to your `.env` file. This is not required, though.
-
-```bash
-HCP_API_KEY=
-HCP_ORG=
-HCP_PROJECT=
-```
-
-[**→ Read the docs**](https://nextjs.org/docs/app/building-your-application/optimizing/instrumentation)
-
-### Image Optimization
-
-Next.js supports optimizing images out of the box with `next start`. We've made some improvements in Next.js 15 so you don't need to manually install `sharp` to optimize images. This means your Next.js server will use `sharp` and can optimize both local or remote images.
-
-I've included a custom image loader, which will allow you to move optimization to a separate self-hosted service or cloud API if you prefer. You can uncomment that in the configuration and then modify `image-loader.ts` with your service.
-
-[**→ Read the docs**](https://nextjs.org/docs/app/building-your-application/deploying#image-optimization)
-
-### Middleware
-
-This demo has a route `/protected` which is guarded by Middleware.
-
-[**→ Read the docs**](https://nextjs.org/docs/app/building-your-application/deploying#middleware)
-
 ## Running Locally
 
 If you want to run this setup locally using Docker, you can follow these steps:
@@ -136,20 +98,11 @@ If you want to view the contents of the local database, you can use Drizzle Stud
 bun run db:studio
 ```
 
-## Cron
-
-I've also included a basic cron job which runs every hour to clear the database. It calls a Route Handler in the Next.js application.
-
-You can view the cron logs as follows from inside of your `myapp/` (or different chosen name) folder:
-
-```bash
-docker-compose logs cron
-```
-
 ## Helpful Commands
 
 - `docker-compose ps` – check status of Docker containers
 - `docker-compose logs web` – view Next.js output logs
+- `docker-compose logs cron` – view cron logs
 - `docker-compose down` - shut down the Docker containers
 - `docker-compose up -d` - start containers in the background
 - `sudo systemctl restart nginx` - restart nginx
