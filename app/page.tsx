@@ -34,8 +34,8 @@ export default async function Home() {
       <h3>Image Optimization</h3>
       <Image
         src="https://images.unsplash.com/photo-1488590528505-98d2b5aba04b"
-        width={480}
-        height={320}
+        width={480 / 2}
+        height={320 / 2}
         alt="Coding"
       />
       <p>
