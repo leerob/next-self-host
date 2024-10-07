@@ -144,20 +144,7 @@ server {
 
         # Disable buffering for streaming support
         proxy_buffering off;
-        proxy_request_buffering off;
-
-        # Ensure chunked transfer encoding is enabled
-        chunked_transfer_encoding on;
-
-        # Set proxy buffer sizes
-        proxy_buffers 8 16k;
-        proxy_buffer_size 32k;
-
-        # Additional headers for streaming
         proxy_set_header X-Accel-Buffering no;
-
-        # Apply rate limiting
-        limit_req zone=mylimit burst=20 nodelay;
     }
 }
 EOL
