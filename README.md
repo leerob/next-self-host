@@ -108,3 +108,8 @@ bun run db:studio
 - `sudo systemctl restart nginx` - restart nginx
 - `docker exec -it myapp-web-1 sh` - enter Next.js Docker container
 - `docker exec -it myapp-db-1 psql -U myuser -d mydatabase` - enter Postgres db
+
+## Other Resources
+
+- [Kubernetes Example](https://github.com/ezeparziale/nextjs-k8s)
+- [Redis Cache Adapter for Next.js](https://github.com/vercel/next.js/tree/canary/examples/cache-handler-redis)

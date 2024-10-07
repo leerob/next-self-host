@@ -13,7 +13,7 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 RUN bun run build
 
-# Stage 3: Production image
+# Stage 3: Production server
 FROM base AS runner
 WORKDIR /app
 ENV NODE_ENV=production
