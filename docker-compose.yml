@@ -24,10 +24,9 @@ services:
       - my_network
 
   cron:
-    image: alpine
+    image: alpine/curl
     command: >
       sh -c "
-        apk add --no-cache curl && \
         echo '*/10 * * * * curl -X POST http://web:3000/db/clear' > /etc/crontabs/root && \
         crond -f -l 2
       "

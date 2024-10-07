@@ -36,8 +36,8 @@ I've included a Bash script which does the following:
 1. Clones this repository
 1. Generates an SSL certificate
 1. Builds your Next.js application from the Dockerfile
-1. Sets up Nginx as a reverse proxy and configures HTTPS
-1. Sets up a cron which clears the database every hour
+1. Sets up Nginx and configures HTTPS and rate limting
+1. Sets up a cron which clears the database every 10m
 1. Creates a `.env` file with your Postgres database creds
 
 Once the deployment completes, your Next.js app will be available at:
@@ -149,3 +149,5 @@ docker-compose logs cron
 - `docker-compose down` - shut down the Docker containers
 - `docker-compose up -d` - start containers in the background
 - `sudo systemctl restart nginx` - restart nginx
+- `docker exec -it myapp-web-1 sh` - enter Next.js Docker container, from `myapp/`
+- `docker exec -it myapp-db-1 psql -U myuser -d mydatabase` - enter Postgres db, from `myapp/`

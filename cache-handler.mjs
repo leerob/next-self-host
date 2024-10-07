@@ -20,7 +20,6 @@ async function loadTagsManifest() {
     const data = await fs.readFile(TAGS_MANIFEST, 'utf8');
     return JSON.parse(data);
   } catch (err) {
-    // If the file doesn't exist, return an empty object
     if (err.code === 'ENOENT') {
       return { items: {} };
     }
@@ -51,10 +50,8 @@ class CacheHandler {
     try {
       const data = await fs.readFile(filePath, 'utf8');
       const entry = JSON.parse(data);
-
       const { value, lastModified } = entry;
 
-      // Get tags from entry
       let cacheTags = entry.tags;
 
       if (
@@ -65,7 +62,6 @@ class CacheHandler {
         cacheTags = value.headers['x-next-cache-tags'].split(',');
       }
 
-      // Load tags manifest
       const tagsManifest = await loadTagsManifest();
 
       // Check if any tags have been revalidated after the cache entry
