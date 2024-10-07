@@ -51,7 +51,7 @@ export default async function Home() {
       </small>
       <h3>Database</h3>
       <p>
-        Navigate to <a href="/db">/protected</a>
+        Navigate to <a href="/db">/db</a>
       </p>
       <small>
         This route reads and writes to our Postgres database, which is in its
@@ -60,7 +60,7 @@ export default async function Home() {
       </small>
       <h3>Incremental Static Regeneration</h3>
       <p>
-        Navigate to <a href="/isr">/protected</a>
+        Navigate to <a href="/isr">/isr</a>
       </p>
       <small>
         This route retrieves data with <code>fetch</code> from an API. Then, it
