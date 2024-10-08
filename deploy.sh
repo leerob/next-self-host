@@ -157,7 +157,7 @@ sudo systemctl restart nginx
 
 # Build and run the Docker containers from the app directory (~/myapp)
 cd $APP_DIR
-sudo docker-compose up -d
+sudo docker-compose up --build -d
 
 # Check if Docker Compose started correctly
 if ! sudo docker-compose ps | grep "Up"; then
