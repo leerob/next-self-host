@@ -87,7 +87,7 @@ For pushing subsequent updates, I also provided an `update.sh` script as an exam
 If you want to run this setup locally using Docker, you can follow these steps:
 
 ```bash
-docker-compose up
+docker-compose up -d
 ```
 
 This will start both services and make your Next.js app available at `http://localhost:3000` with the PostgreSQL database running in the background. We also create a network so that our two containers can communicate with each other.
@@ -114,3 +114,4 @@ bun run db:studio
 - [Kubernetes Example](https://github.com/ezeparziale/nextjs-k8s)
 - [Redis Cache Adapter for Next.js](https://github.com/vercel/next.js/tree/canary/examples/cache-handler-redis)
 - [ipx – Image optimization library](https://github.com/unjs/ipx)
+- [OrbStack - Fast Docker desktop client](https://orbstack.dev/)
