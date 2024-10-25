@@ -111,7 +111,7 @@ if [ ! -f /etc/letsencrypt/ssl-dhparams.pem ]; then
 fi
 
 # Create Nginx config with reverse proxy, SSL support, rate limiting, and streaming support
-sudo cat > /etc/nginx/sites-available/myapp <<EOL
+sudo tee /etc/nginx/sites-available/myapp > /dev/null <<EOL
 limit_req_zone \$binary_remote_addr zone=mylimit:10m rate=10r/s;
 
 server {
