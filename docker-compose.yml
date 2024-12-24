@@ -1,6 +1,7 @@
 services:
   web:
     build: .
+    container_name: myapp_web
     ports:
       - '3000:3000'
     environment:
