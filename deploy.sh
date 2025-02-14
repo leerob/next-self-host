@@ -2,7 +2,14 @@
 
 # Env Vars
 POSTGRES_USER="myuser"
-POSTGRES_PASSWORD=$(openssl rand -base64 12)  # Generate a random 12-character password
+#POSTGRES_PASSWORD=$(openssl rand -base64 12)  # Generate a random 12-character password
+POSTGRES_PASSWORD="12345678" # ggf. im laufenden Container nachher anpassen, wenn es Fehler gibt! (Digest XXX und auth error)
+# sudo docker exec -it myapp-db-1 psql -U myuser -d mydatabase
+# in der Shell des Container
+# psql -U myuser
+# \password
+# Enter new password ... usw.
+
 POSTGRES_DB="mydatabase"
 SECRET_KEY="my-secret" # for the demo app
 NEXT_PUBLIC_SAFE_KEY="safe-key" # for the demo app
@@ -70,8 +77,8 @@ else
   cd $APP_DIR
 fi
 
-# For Docker internal communication ("db" is the name of Postgres container)
-DATABASE_URL="postgres://$POSTGRES_USER:$POSTGRES_PASSWORD@db:5432/$POSTGRES_DB"
+# For Docker internal communication ("myapp-db-1" is the name of Postgres container)
+DATABASE_URL="postgres://$POSTGRES_USER:$POSTGRES_PASSWORD@myapp-db-1:5432/$POSTGRES_DB"
 
 # For external tools (like Drizzle Studio)
 DATABASE_URL_EXTERNAL="postgres://$POSTGRES_USER:$POSTGRES_PASSWORD@localhost:5432/$POSTGRES_DB"
