@@ -103,7 +103,7 @@ sudo certbot certonly --standalone -d $DOMAIN_NAME --non-interactive --agree-tos
 
 # Ensure SSL files exist or generate them
 if [ ! -f /etc/letsencrypt/options-ssl-nginx.conf ]; then
-  sudo wget https://raw.githubusercontent.com/certbot/certbot/main/certbot-nginx/certbot_nginx/_internal/tls_configs/options-ssl-nginx.conf -P /etc/letsencrypt/
+  sudo wget https://raw.githubusercontent.com/certbot/certbot/refs/heads/main/certbot-nginx/src/certbot_nginx/_internal/tls_configs/options-ssl-nginx.conf -P /etc/letsencrypt/
 fi
 
 if [ ! -f /etc/letsencrypt/ssl-dhparams.pem ]; then
