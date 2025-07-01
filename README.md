@@ -49,8 +49,6 @@ This demo tries to showcase many different Next.js features.
 - Running code on server startup
 - A cron that hits a Route Handler
 
-View the demo at https://nextselfhost.dev to see further explanations.
-
 ## Deploy Script
 
 I've included a Bash script which does the following:
